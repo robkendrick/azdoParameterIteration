@@ -40,7 +40,7 @@ jobs:
     variables:
       - ${{ each res in parameters.supportingResources }}:
           - name: ${{res.type}}Suffix
-            value: $[dependencies.IterationAndAssignment.outputs.${{res.type}}.suffix]
+            value: $[dependencies.IterationAndAssignment.outputs[${{res.type}}.suffix]]
     steps:
       - checkout: none
       - ${{ each res in parameters.supportingResources }}:
