@@ -21,7 +21,7 @@ jobs:
       - ${{ each res in parameters.supportingResources }}:
           - bash: |
               echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
-              echo "It is a ${{res.}}"
+              echo "It is a $type."
               echo ""; echo ""
               echo "Let's try to assign them as outputs."
               echo "##vso[task.setvariable variable=suffix;isOutput=true]$suffix"
