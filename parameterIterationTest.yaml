@@ -13,11 +13,14 @@ parameters:
         template: null
         suffix: jihgfedcba
 
+variables:
+  system.debug: true
 
 jobs:
   - job: IterationAndAssignment
     displayName: "Iterate through each Supporting Resource and pull via environment variables."
     steps:
+      - checkout: none
       - ${{ each res in parameters.supportingResources }}:
           - bash: |
               echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
@@ -38,8 +41,8 @@ jobs:
       - ${{ each res in parameters.supportingResources }}:
           - name: ${{res.type}}Suffix
             value: $[dependencies.IterationAndAssignment.outputs.${{res.type}}.suffix]
-
     steps:
+      - checkout: none
       - ${{ each res in parameters.supportingResources }}:
           - bash: |
               echo "Macro variable test for the suffix: $(${{res.type}}Suffix)"
