@@ -1,0 +1,18 @@
+parameters:
+  - name: supportingResources
+    type: object
+    default:
+      keyVault:                   # No dash here because this is a sub-property of an object we're accessing directly, not an array.
+        namePrefix: project00kv    # Can we iteration through it regardless?
+        rGTN: Ops
+        template: null
+      database:
+        namePrefix: project01sqls
+        rGTN: Data
+        template: null
+
+
+steps:
+  - ${{ each res in parameters.supportingResources }}:
+    - bash: |
+        echo "The resource we're working with is ${{res.namePrefix}} in the VisualDev-${{res.rGTN}} Resource Group."
