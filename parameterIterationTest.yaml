@@ -2,11 +2,11 @@ parameters:
   - name: supportingResources
     type: object
     default:
-      keyVault:                   # No dash here because this is a sub-property of an object we're accessing directly, not an array.
+      - keyVault:                   # No dash here because this is a sub-property of an object we're accessing directly, not an array.
         namePrefix: project00kv    # Can we iteration through it regardless?
         rGTN: Ops
         template: null
-      database:
+      - database:
         namePrefix: project01sqls
         rGTN: Data
         template: null
