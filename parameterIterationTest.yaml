@@ -15,4 +15,7 @@ parameters:
 steps:
   - ${{ each res in parameters.supportingResources }}:
     - bash: |
-        echo "The resource we're working with is ${{res.namePrefix}} in the VisualDev-${{res.rGTN}} Resource Group."
+        echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
+      env:
+        namePrefix: ${{res.namePrefix}}
+        rGTN: ${{res.rGTN}}
