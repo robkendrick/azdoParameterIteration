@@ -23,8 +23,13 @@ jobs:
       - checkout: none
       - bash: |
           echo "Number of resources: $numRes"
+          echo "SQL Server for this run: $sqlServerName"
         env:
           numRes: ${{ length(parameters.supportingResources) }}
+          ${{ each res in parameters.supportingResources }}:
+              ${{ if eq(res.type, 'database') }}:
+                sqlServerName: ${{res.namePrefix}}${{res.suffix}}
+
       - ${{ each res in parameters.supportingResources }}:
           - bash: |
               echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
