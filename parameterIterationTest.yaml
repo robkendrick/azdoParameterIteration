@@ -21,6 +21,10 @@ jobs:
     displayName: "Iterate through each Supporting Resource and pull via environment variables."
     steps:
       - checkout: none
+      - bash: |
+          echo "Number of resources: $numRes"
+        env:
+          numRes: ${{ length(parameters.supportingResources) }}
       - ${{ each res in parameters.supportingResources }}:
           - bash: |
               echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
