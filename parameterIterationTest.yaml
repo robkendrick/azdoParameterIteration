@@ -2,20 +2,48 @@ parameters:
   - name: supportingResources
     type: object
     default:
-      - keyVault:                   # No dash here because this is a sub-property of an object we're accessing directly, not an array.
-        namePrefix: project00kv    # Can we iteration through it regardless?
+      - type: keyVault
+        namePrefix: project00kv
         rGTN: Ops
         template: null
-      - database:
+        suffix: abcdefghij
+      - type: database
         namePrefix: project01sqls
         rGTN: Data
         template: null
+        suffix: jihgfedcba
 
 
-steps:
-  - ${{ each res in parameters.supportingResources }}:
-    - bash: |
-        echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
-      env:
-        namePrefix: ${{res.namePrefix}}
-        rGTN: ${{res.rGTN}}
+jobs:
+  - job: IterationAndAssignment
+    displayName: "Iterate through each Supporting Resource and pull via environment variables."
+    steps:
+      - ${{ each res in parameters.supportingResources }}:
+          - bash: |
+              echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
+              echo "It is a ${{res.}}"
+              echo ""; echo ""
+              echo "Let's try to assign them as outputs."
+              echo "##vso[task.setvariable variable=suffix;isOutput=true]$suffix"
+            env:
+              type: ${{res.type}}
+              namePrefix: ${{res.namePrefix}}
+              rGTN: ${{res.rGTN}}
+              suffix: ${{res.suffix}}
+            name: ${{res.type}}
+
+  - job: TestIterationOutput
+    displayName: "See if we can dynamically name the steps under the job."
+    variables:
+      - ${{ each res in parameters.supportingResources }}:
+          - name: ${{res.type}}Suffix
+            value: $[dependencies.IterationAndAssignment.outputs.${{res.type}}.suffix]
+
+    steps:
+      - ${{ each res in parameters.supportingResources }}:
+          - bash: |
+              echo "Macro variable test for the suffix: $(${{res.type}}Suffix)"
+              echo "Environment variable Macro test for the suffix: $suffix"
+            env:
+              suffix: $(${{res.type}}Suffix)
+            displayName: Check variables for ${{res.namePrefix}}.
