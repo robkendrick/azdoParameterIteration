@@ -14,10 +14,10 @@ parameters:
         suffix: jihgfedcba
         accessIdentities:
           - namePrefix: WebsiteA
-            instances: [ "00" ]
+            instances: [ "01", "02" ]
             type: mid
           - namePrefix: WebsiteB
-            instances: ['00']
+            instances: ['00','01','02']
             type: mid
           - namePrefix: AppGateway
             instances:
