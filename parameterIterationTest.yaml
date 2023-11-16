@@ -21,7 +21,7 @@ parameters:
             type: mid
           - namePrefix: AppGateway
             instances:
-              - 00
+              - '00'  # If you leave this as an integer (without the quotes), the leading zero will be dropped.
             type: mid
 
 variables:
