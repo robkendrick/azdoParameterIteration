@@ -1,5 +1,5 @@
 parameters:
-  - name: supportingResources
+  - name: deploymentResources
     type: object
     default:
       - type: keyVault
@@ -12,6 +12,17 @@ parameters:
         rGTN: Data
         template: null
         suffix: jihgfedcba
+        accessIdentities:
+          - namePrefix: WebsiteA
+            instances: [ "00" ]
+            type: mid
+          - namePrefix: WebsiteB
+            instances: '00'
+            type: mid
+          - namePrefix: AppGateway
+            instances:
+              - 00
+            type: mid
 
 variables:
   system.debug: true
@@ -25,12 +36,12 @@ jobs:
           echo "Number of resources: $numRes"
           echo "SQL Server for this run: $sqlServerName"
         env:
-          numRes: ${{ length(parameters.supportingResources) }}
-          ${{ each res in parameters.supportingResources }}:
+          numRes: ${{ length(parameters.deploymentResources) }}
+          ${{ each res in parameters.deploymentResources }}:
               ${{ if eq(res.type, 'database') }}:
                 sqlServerName: ${{res.namePrefix}}${{res.suffix}}
 
-      - ${{ each res in parameters.supportingResources }}:
+      - ${{ each res in parameters.deploymentResources }}:
           - bash: |
               echo "The resource we're working with is $namePrefix in the ProjectDev-$rGTN Resource Group."
               echo "It is a $type."
@@ -48,15 +59,20 @@ jobs:
     displayName: "See if we can dynamically name the steps under the job."
     dependsOn: IterationAndAssignment
     variables:
-      - ${{ each res in parameters.supportingResources }}:
+      - ${{ each res in parameters.deploymentResources }}:
           - name: ${{res.type}}Suffix
             value: $[dependencies.IterationAndAssignment.outputs['${{res.type}}.suffix']]
     steps:
       - checkout: none
-      - ${{ each res in parameters.supportingResources }}:
+      - ${{ each res in parameters.deploymentResources }}:
           - bash: |
               echo "Macro variable test for the suffix: $(${{res.type}}Suffix)"
               echo "Environment variable Macro test for the suffix: $suffix"
             env:
               suffix: $(${{res.type}}Suffix)
             displayName: Check variables for ${{res.namePrefix}}.
+          - ${{ each id in res.accessIdentities }}:
+              - ${{ each instance in id.instances }}:
+                  - bash: |
+                      echo "Identity to whom we're providing permissions: ${{id.namePrefix}}${{instance}}${{id.type}}"
+                    displayName: "Identity: ${{id.namePrefix}}${{instance}}${{id.type}}"
