@@ -17,7 +17,7 @@ parameters:
             instances: [ "00" ]
             type: mid
           - namePrefix: WebsiteB
-            instances: '00'
+            instances: ['00']
             type: mid
           - namePrefix: AppGateway
             instances:
