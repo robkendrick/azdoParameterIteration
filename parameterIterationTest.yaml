@@ -73,6 +73,10 @@ jobs:
             value: $[dependencies.IterationAndAssignment.outputs['${{res.type}}.suffix']]
     steps:
       - checkout: none
+      - bash: |
+          echo "Deployment Environment: ${{parameters.deploymentEnvironment}}"
+          echo "Test DB Environment check: ${{parameters.deploymentResources[1].databases[0].readers[0].environments}}"
+          echo "Does the DB need permissions for this environment? ${{ contains(parameters.deploymentResources[1].databases[0].readers[0].environments, parameters.deploymentEnvironment)}}"
       - ${{ each res in parameters.deploymentResources }}:
           - bash: |
               echo "Macro variable test for the suffix: $(${{res.type}}Suffix)"
@@ -80,13 +84,10 @@ jobs:
             env:
               suffix: $(${{res.type}}Suffix)
             displayName: Check variables for ${{res.namePrefix}}.
-          - bash: |
-              echo "Deployment Environment: ${{parameters.deploymentEnvironment}}"
-              echo "Test DB Environment check: ${{parameters.deploymentResources[1].databases[0].readers[0].environments}}"
           - ${{ if eq('${{res.type}}', 'database') }}:
             - ${{each db in res.databases}}:
                 - ${{ each reader in db.readers }}:
-                    - ${{ if contains('${{reader.environments}}', '${{parameters.deploymentEnvironment}}') }}:
+                    - ${{ if contains(reader.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding reader ${{reader}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
                     - ${{ else }}:
                       - bash: echo "Reader ${{reader}} not valid for ${{parameters.deploymentEnvironment}}"
