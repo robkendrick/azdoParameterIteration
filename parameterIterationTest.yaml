@@ -92,7 +92,7 @@ jobs:
                     - ${{ else }}:
                       - bash: echo "Reader ${{reader.name}} not valid for ${{parameters.deploymentEnvironment}}"
                 - ${{ each writer in db.writers }}:
-                    - ${{ if contains('${{writer.environments}}', '${{parameters.deploymentEnvironment}}') }}:
+                    - ${{ if contains(writer.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding writer ${{writer.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
                     - ${{ else }}:
                       - bash: echo "writer ${{writer.name}} not valid for ${{parameters.deploymentEnvironment}}"
