@@ -80,6 +80,9 @@ jobs:
             env:
               suffix: $(${{res.type}}Suffix)
             displayName: Check variables for ${{res.namePrefix}}.
+          - bash: |
+              echo "Deployment Environment: ${{parameters.deploymentEnvironment}}"
+              echo "Test DB Environment check: ${{parameters.deploymentResources[1].databases[0].readers[0].environments}}"
           - ${{ if eq('${{res.type}}', 'database') }}:
             - ${{each db in res.databases}}:
                 - ${{ each reader in db.readers }}:
