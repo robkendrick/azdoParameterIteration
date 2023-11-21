@@ -84,7 +84,7 @@ jobs:
             env:
               suffix: $(${{res.type}}Suffix)
             displayName: Check variables for ${{res.namePrefix}}.
-          - ${{ if eq('${{res.type}}', 'database') }}:
+          - ${{ if eq(res.type, 'database') }}:
             - ${{each db in res.databases}}:
                 - ${{ each reader in db.readers }}:
                     - ${{ if contains(reader.environments, parameters.deploymentEnvironment) }}:
