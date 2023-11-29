@@ -95,3 +95,6 @@ jobs:
                 - ${{ each writer in db.writers }}:
                     - ${{ if containsValue(writer.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding writer ${{writer.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                - ${{ each admin in db.admins }}:
+                    - ${{ if containsValue(admin.environments, parameters.deploymentEnvironment) }}:
+                      - bash: echo "Adding admin ${{admin.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
