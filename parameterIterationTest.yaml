@@ -78,8 +78,8 @@ jobs:
       - checkout: none
       - bash: |
           echo "Deployment Environment: ${{parameters.deploymentEnvironment}}"
-          # echo "Test DB Environment check: ${{parameters.deploymentResources[1].databases[0].readers[0].environments}}"
-          # echo "Does the DB need permissions for this environment? ${{ contains(parameters.deploymentResources[1].databases[0].readers[0].environments, parameters.deploymentEnvironment)}}"
+#          echo "Test DB Environment check: ${{parameters.deploymentResources[1].databases[0].readers[0].environments}}"
+#          echo "Does the DB need permissions for this environment? ${{ contains(parameters.deploymentResources[1].databases[0].readers[0].environments, parameters.deploymentEnvironment)}}"
       - ${{ each res in parameters.deploymentResources }}:
           - bash: |
               echo "Macro variable test for the suffix: $(${{res.type}}Suffix)"
