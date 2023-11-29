@@ -1,7 +1,7 @@
 parameters:
   - name: deploymentEnvironment
     type: string
-    default: Prod
+    default: prod
   - name: deploymentResources
     type: object
     default:
@@ -41,7 +41,7 @@ variables:
 
 jobs:
   - job: IterationAndAssignment
-    displayName: "Iterate through each Supporting Resource and pull via environment variables."
+    displayName: "Iterate through each Supporting Resource and pull properties and suffixes via environment variables."
     steps:
       - checkout: none
       - bash: |
@@ -68,7 +68,7 @@ jobs:
             name: ${{res.type}}
 
   - job: TestIterationOutput
-    displayName: "See if we can dynamically name the steps under the job."
+    displayName: "Test selectively deploying based on elements in an array."
     dependsOn: IterationAndAssignment
     variables:
       - ${{ each res in parameters.deploymentResources }}:
