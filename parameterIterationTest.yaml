@@ -90,12 +90,12 @@ jobs:
           - ${{ if eq(res.type, 'database') }}:
             - ${{each db in res.databases}}:
                 - ${{ each reader in db.readers }}:
-                    - ${{ if contains(reader.environments, parameters.deploymentEnvironment) }}:
+                    - ${{ if containsValue(reader.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding reader ${{reader.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
 #                    - ${{ else }}:
 #                      - bash: echo "Reader ${{reader.name}} not valid for ${{parameters.deploymentEnvironment}}"
                 - ${{ each writer in db.writers }}:
-                    - ${{ if contains(writer.environments, parameters.deploymentEnvironment) }}:
+                    - ${{ if containsValue(writer.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding writer ${{writer.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
 #                    - ${{ else }}:
 #                      - bash: echo "writer ${{writer.name}} not valid for ${{parameters.deploymentEnvironment}}"
