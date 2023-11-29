@@ -19,17 +19,20 @@ parameters:
           - name: database01db
             readers:            # Note: Readers also get the CONNECT grant, and the DLN {Env} DB Readers group will be added automatically.
               - name: database01mid
-                environments: "Dev, QA, Preprod, Prod"
+                environments: ['Dev', 'QA', 'Preprod', 'Prod']
             writers:            # Note: Writers also get the EXECUTE grant.
               - name: database01mid
-                environments: "QA, Preprod"
-          - name: database02db
-            readers:
-              - name: database02mid
-                environments: "Dev, QA, Preprod, Prod"
-            writers:
-              - name: database02mid
-                environments: "Dev, QA, Preprod, Prod"
+                environments: ['QA', 'Preprod']
+            admins:                 # Admins get the db_ddladmin role.
+              - name: 'kmk02@acuitysso.com'
+                environments: ['Dev']
+#          - name: database02db
+#            readers:
+#              - name: database02mid
+#                environments: "Dev, QA, Preprod, Prod"
+#            writers:
+#              - name: database02mid
+#                environments: "Dev, QA, Preprod, Prod"
 
 
 
@@ -89,10 +92,10 @@ jobs:
                 - ${{ each reader in db.readers }}:
                     - ${{ if contains(reader.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding reader ${{reader.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
-                    - ${{ else }}:
-                      - bash: echo "Reader ${{reader.name}} not valid for ${{parameters.deploymentEnvironment}}"
+#                    - ${{ else }}:
+#                      - bash: echo "Reader ${{reader.name}} not valid for ${{parameters.deploymentEnvironment}}"
                 - ${{ each writer in db.writers }}:
                     - ${{ if contains(writer.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding writer ${{writer.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
-                    - ${{ else }}:
-                      - bash: echo "writer ${{writer.name}} not valid for ${{parameters.deploymentEnvironment}}"
+#                    - ${{ else }}:
+#                      - bash: echo "writer ${{writer.name}} not valid for ${{parameters.deploymentEnvironment}}"
