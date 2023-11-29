@@ -1,7 +1,7 @@
 parameters:
   - name: deploymentEnvironment
     type: string
-    default: Dev
+    default: Prod
   - name: deploymentResources
     type: object
     default:
@@ -24,7 +24,7 @@ parameters:
               - name: database01mid
                 environments: ['QA', 'Preprod']
             admins:                 # Admins get the db_ddladmin role.
-              - name: 'kmk02@acuitysso.com'
+              - name: 'testemail@test.local'
                 environments: ['Dev']
 #          - name: database02db
 #            readers:
