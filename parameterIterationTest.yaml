@@ -77,18 +77,18 @@ jobs:
     dependsOn: IterationAndAssignment
     steps:
       - checkout: none
-        - task: AzureCLI@2
-          name: getToken
-          inputs: 
-            azureSubscription: ${{parameters.serviceConnection}}
-            scriptType: pscore
-            scriptLocation: inlineScript
-            inlineScript: |
-              $token = $(az account get-access-token --resource=https://database.windows.net --query accessToken -o tsv)
-              echo "##vso[task.setvariable variable=sqlToken;issecret=true;]$token"
-              $conn = new-object System.Data.SqlClient.SqlConnection
-              $conn.ConnectionString = "Server=tcp:${{parameters.deploymentResources[1].namePrefix}}${{parameters.deploymentResources[1].suffix}},1433;Initial Catalog=${{parameters.deploymentResources[1].databases[0].name}}${{parameters.deploymentResources[1].suffix}};Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" 
-              $conn.AccessToken = $token
+      - task: AzureCLI@2
+        name: getToken
+        inputs: 
+          azureSubscription: ${{parameters.serviceConnection}}
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            $token = $(az account get-access-token --resource=https://database.windows.net --query accessToken -o tsv)
+            echo "##vso[task.setvariable variable=sqlToken;issecret=true;]$token"
+            $conn = new-object System.Data.SqlClient.SqlConnection
+            $conn.ConnectionString = "Server=tcp:${{parameters.deploymentResources[1].namePrefix}}${{parameters.deploymentResources[1].suffix}},1433;Initial Catalog=${{parameters.deploymentResources[1].databases[0].name}}${{parameters.deploymentResources[1].suffix}};Persist Security Info=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" 
+            $conn.AccessToken = $token
 
   - job: TestIterationOutput
     condition: false
