@@ -49,8 +49,8 @@ jobs:
     displayName: "Iterate through each Supporting Resource and pull properties and suffixes via environment variables."
     steps:
       - checkout: none
-      ${{ each res in parameters.deploymentResources }}:
-          ${{ if eq(res.type, 'database') }}:
+      - ${{ each res in parameters.deploymentResources }}:
+          - ${{ if eq(res.type, 'database') }}:
             - bash: |
                 echo "Number of resources: $numRes"
                 echo "SQL Server for this run: $sqlServerName"
