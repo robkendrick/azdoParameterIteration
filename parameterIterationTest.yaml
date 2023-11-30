@@ -1,7 +1,7 @@
 parameters:
   - name: deploymentEnvironment
     type: string
-    default: prod
+    default: QA
   - name: deploymentResources
     type: object
     default:
@@ -28,7 +28,9 @@ parameters:
             admins:                 # Admins get the db_ddladmin role.
               - name: 'testemail@test.local'
                 includeSuffix: false
-                environments: ['Dev']
+                environments:
+                  - Dev
+                  - QA
 #          - name: database02db
 #            readers:
 #              - name: database02mid
