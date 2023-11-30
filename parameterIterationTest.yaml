@@ -39,10 +39,8 @@ parameters:
 #              - name: database02mid
 #                environments: "Dev, QA, Preprod, Prod"
 
-
-
 variables:
-  system.debug: true
+  system.debug: false
 
 jobs:
   - job: IterationAndAssignment
@@ -87,6 +85,7 @@ jobs:
           echo "Deployment Environment: ${{parameters.deploymentEnvironment}}"
 #          echo "Test DB Environment check: ${{parameters.deploymentResources[1].databases[0].readers[0].environments}}"
 #          echo "Does the DB need permissions for this environment? ${{ contains(parameters.deploymentResources[1].databases[0].readers[0].environments, parameters.deploymentEnvironment)}}"
+        displayName: 'Deployment Environment: ${{parameters.deploymentEnvironment}}'
       - ${{ each res in parameters.deploymentResources }}:
           - bash: |
               echo "Macro variable test for the suffix: $(${{res.type}}Suffix)"
@@ -100,11 +99,14 @@ jobs:
                     - ${{ if containsValue(reader.environments, parameters.deploymentEnvironment) }}:
                       - ${{ if eq(reader.includeSuffix, 'true') }}:
                         - bash: echo "Adding reader ${{reader.name}}$(databaseSuffix) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'Add ${{reader.name}}$(databaseSuffix) to ${{db.name}}.'
                       - ${{ else }}:
                         - bash: echo "Adding reader ${{reader.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'Add ${{reader.name}} to ${{db.name}}.'
                 - ${{ each writer in db.writers }}:
                     - ${{ if containsValue(writer.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding writer ${{writer.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                        displayName: 'Add ${{writer.name}} to ${{db.name}}.'
                 - ${{ each admin in db.admins }}:
                     - ${{ if containsValue(admin.environments, parameters.deploymentEnvironment) }}:
                       - bash: echo "Adding admin ${{admin.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
