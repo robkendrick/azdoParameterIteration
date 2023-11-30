@@ -100,14 +100,15 @@ jobs:
                         - bash: |
                             if [ "${{reader.includeSuffix}}" ]; then
                               echo "We'll be adding the suffix $(databaseSuffix) to the reader ${{reader.name}}."
-                              echo "##vso[task.setvariable variable=readerName]${{reader.name}}$(databaseSuffix)"
+                              echo "##vso[task.setvariable variable=readerName;isoutput=true]${{reader.name}}$(databaseSuffix)"
                             else
                               echo "No Suffix for ${{reader.name}}."
-                              echo "##vso[task.setvariable variable=readerName]${{reader.name}}"
+                              echo "##vso[task.setvariable variable=readerName;isoutput=true]${{reader.name}}"
                             fi
+                          name: rs
                           displayName: 'Include suffix for ${{reader.name}}? ${{reader.includeSuffix}}.'
-                        - bash: echo "Adding reader $(readerName) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
-                          displayName: 'Add $(readerName) to ${{db.name}}.'
+                        - bash: echo "Adding reader $(rs.readerName) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'Add $(rs.readerName) to ${{db.name}}.'
 #               - ${{ each writer in db.writers }}:
 #                   - ${{ if containsValue(writer.environments, parameters.deploymentEnvironment) }}:
 #                     - ${{ if eq(writer.includeSuffix, 'true') }}:
