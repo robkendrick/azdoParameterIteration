@@ -99,14 +99,23 @@ jobs:
                     - ${{ if containsValue(reader.environments, parameters.deploymentEnvironment) }}:
                       - ${{ if eq(reader.includeSuffix, 'true') }}:
                         - bash: echo "Adding reader ${{reader.name}}$(databaseSuffix) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
-                          displayName: 'Add ${{reader.name}}$(databaseSuffix) to ${{db.name}}.'
+                          displayName: 'SuffixReader: Add ${{reader.name}}$(databaseSuffix) to ${{db.name}}.'
                       - ${{ else }}:
                         - bash: echo "Adding reader ${{reader.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
-                          displayName: 'Add ${{reader.name}} to ${{db.name}}.'
+                          displayName: 'NoSuffReader: Add ${{reader.name}} to ${{db.name}}.'
                 - ${{ each writer in db.writers }}:
                     - ${{ if containsValue(writer.environments, parameters.deploymentEnvironment) }}:
-                      - bash: echo "Adding writer ${{writer.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
-                        displayName: 'Add ${{writer.name}} to ${{db.name}}.'
+                      - ${{ if eq(writer.includeSuffix, 'true') }}:
+                        - bash: echo "Adding writer ${{writer.name}}$(databaseSuffix) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'SuffixWriter: Add ${{writer.name}}$(databaseSuffix) to ${{db.name}}.'
+                      - ${{ else }}:
+                        - bash: echo "Adding writer ${{writer.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'NoSuffWriter: Add ${{writer.name}} to ${{db.name}}.'
                 - ${{ each admin in db.admins }}:
                     - ${{ if containsValue(admin.environments, parameters.deploymentEnvironment) }}:
-                      - bash: echo "Adding admin ${{admin.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                      - ${{ if eq(writer.includeSuffix, 'true') }}:
+                        - bash: echo "Adding admin ${{admin.name}}$(databaseSuffix) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'SuffixAdmin: Add ${{admin.name}}$(databaseSuffix) to ${{db.name}}.'
+                      - ${{ else }}:
+                        - bash: echo "Adding admin ${{admin.name}} to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'NoSuffAdmin: Add ${{admin.name}} to ${{db.name}}.'
