@@ -105,10 +105,10 @@ jobs:
                               echo "No Suffix for ${{reader.name}}."
                               echo "##vso[task.setvariable variable=readerName]${{reader.name}}"
                             fi
-                          name: reader
+                          name: rs
                           displayName: 'Include suffix for ${{reader.name}}? ${{reader.includeSuffix}}.'
-                        - bash: echo "Adding reader $(reader.readerName) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
-                          displayName: 'Add $(reader.readerName) to ${{db.name}}.'
+                        - bash: echo "Adding reader $(rs.readerName) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
+                          displayName: 'Add $(rs.readerName) to ${{db.name}}.'
 #               - ${{ each writer in db.writers }}:
 #                   - ${{ if containsValue(writer.environments, parameters.deploymentEnvironment) }}:
 #                     - ${{ if eq(writer.includeSuffix, 'true') }}:
