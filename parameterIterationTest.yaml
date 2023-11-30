@@ -52,6 +52,7 @@ jobs:
       - bash: |
           echo "Number of resources: $numRes"
           echo "SQL Server for this run: $sqlServerName"
+        name: ${{res.namePrefix}}${{res.suffix}}
         env:
           numRes: ${{ length(parameters.deploymentResources) }}
           ${{ each res in parameters.deploymentResources }}:
@@ -71,6 +72,7 @@ jobs:
               rGTN: ${{res.rGTN}}
               suffix: ${{res.suffix}}
             name: ${{res.type}}
+            displayName: 'Supporting Resource - ${{res.type}}: ${{res.namePrefix}}'
 
   - job: TestIterationOutput
     displayName: "Test selectively deploying based on elements in an array."
