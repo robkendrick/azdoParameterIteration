@@ -113,7 +113,7 @@ jobs:
                           displayName: 'NoSuffWriter: Add ${{writer.name}} to ${{db.name}}.'
                 - ${{ each admin in db.admins }}:
                     - ${{ if containsValue(admin.environments, parameters.deploymentEnvironment) }}:
-                      - ${{ if eq(writer.includeSuffix, 'true') }}:
+                      - ${{ if eq(admin.includeSuffix, 'true') }}:
                         - bash: echo "Adding admin ${{admin.name}}$(databaseSuffix) to database ${{db.name}} in ${{parameters.deploymentEnvironment}}"
                           displayName: 'SuffixAdmin: Add ${{admin.name}}$(databaseSuffix) to ${{db.name}}.'
                       - ${{ else }}:
